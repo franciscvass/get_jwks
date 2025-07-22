@@ -45,7 +45,11 @@ jobs:
           git commit -m "Add matched-jwks.json from GitHub Actions" || echo "No changes to commit"
           git push
 
-       
+      - name: Show raw file URL
+        run: |
+          echo "Raw file URL:"
+          echo "https://raw.githubusercontent.com/${{ github.repository }}/${{ github.ref_name }}/matched-jwks.json"
+      
 
 
 
