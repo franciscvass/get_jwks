@@ -39,4 +39,4 @@ jobs:
         id: kid
         run:
           #echo "{{ steps.extract_kid.outputs.kid}}"
-          echo $GITHUB_OUTPUT
+          cat $GITHUB_OUTPUT
