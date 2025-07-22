@@ -4,6 +4,10 @@ name: Get jwks
 on:
   workflow_dispatch
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   get_jwks:
     runs-on: ubuntu-latest
