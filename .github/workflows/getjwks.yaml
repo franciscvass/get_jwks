@@ -27,13 +27,6 @@ jobs:
           curl -sSL https://token.actions.githubusercontent.com/.well-known/jwks -o github-jwks.json
           jq --arg KID "$KID" '{ keys: [.keys[] | select(.kid == $KID)] }' github-jwks.json > matched-jwks.json
 
-      - name: Upload Debug Files 
-        uses: actions/upload-artifact@v4
-        with:
-          name: oci-upst-debug
-          path: |
-            matched-jwks.json
-
       - name: Configure git
         run: |
           git config user.name "github-actions[bot]"
