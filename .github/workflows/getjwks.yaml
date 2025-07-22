@@ -25,7 +25,7 @@ jobs:
           GH_TOKEN_STR=$(jq -r '.value' id-token.json)
           KID=$(echo "$GH_TOKEN_STR" | cut -d '.' -f1 | base64 -d 2>/dev/null | jq -r .kid)
           curl -sSL https://token.actions.githubusercontent.com/.well-known/jwks -o github-jwks.json
-          jq --arg KID "$KID" '{ keys: [.keys[] | select(.kid == $KID)] }' github-jwks.json > "{{ vars.RULE_NAME }}.json"
+          jq --arg KID "$KID" '{ keys: [.keys[] | select(.kid == $KID)] }' github-jwks.json > "${{ vars.RULE_NAME }}.json"
 
       - name: Configure git
         run: |
@@ -34,14 +34,14 @@ jobs:
 
       - name: Commit and push file
         run: |
-          git add "{{ vars.RULE_NAME }}.json"
+          git add "${{ vars.RULE_NAME }}.json"
           git commit -m "Add matched-jwks.json from GitHub Actions" || echo "No changes to commit"
           git push
 
       - name: Show raw file URL
         run: |
           echo "Raw file URL:"
-          echo "https://raw.githubusercontent.com/${{ github.repository }}/${{ github.ref_name }}/"{{ vars.RULE_NAME }}.json"
+          echo "https://raw.githubusercontent.com/${{ github.repository }}/${{ github.ref_name }}/${{ vars.RULE_NAME }}.json"
       
 
 
