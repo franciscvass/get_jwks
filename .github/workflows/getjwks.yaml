@@ -26,7 +26,7 @@ jobs:
       - name: Extract the JWT token string
         id: extract_token_string
         run: |
-          GH_TOKEN_STR=`echo "{{ steps.get_jwt_gh_token.outputs.gh_token}}" | jq -r '.value'`
+          GH_TOKEN_STR=`jq -r '.value' id-token.json`
           echo "gh_token_str=$GH_TOKEN_STR" >> $GITHUB_OUTPUT
 
       - name: Extract the kid
