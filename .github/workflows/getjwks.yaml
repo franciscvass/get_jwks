@@ -7,6 +7,7 @@ on:
 permissions:
   id-token: write
   contents: read
+  contents: write
 
 jobs:
   get_jwks:
@@ -29,6 +30,18 @@ jobs:
           name: oci-upst-debug
           path: |
             matched-jwks.json
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit and push file
+        run: |
+          git add matched-jwks.json
+          git commit -m "Add matched-jwks.json from GitHub Actions" || echo "No changes to commit"
+          git push
+
        
 
 
