@@ -1,0 +1,42 @@
+
+name: Get jwks
+
+on:
+  workflow_dispatch
+
+jobs:
+  get_jwks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Fetch GitHub OIDC Token
+        id: get_jwt_gh_token
+        run: |
+          #curl -sSL -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+          #"${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${{ secrets.CLIENT_ID }}" -o id-token.json
+          GH_TOKEN=`curl -sSL -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+          "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${{ secrets.CLIENT_ID }}"`
+          {
+            "gh_token=$GH_TOKEN"
+          } >> $GITHUB_OUTPUT
+
+      - name: Extract the JWT token string
+        id: extract_token_string
+        run: |
+          GH_TOKEN_STR=`jq -r '.value' {{ steps.get_jwt_gh_token.outputs.gh_token}}`
+          {
+            "gh_token_str=$GH_TOKEN_STR"
+          } >> $GITHUB_OUTPUT
+
+      - name: Extract the kid
+        id: extract_kid
+        run: |
+        KID=$(echo {{ steps.extract_token_string.outputs.gh_token_str }} | cut -d '.' -f1 | base64 -d 2>/dev/null | jq -r .kid)
+        {
+          "kid=$KID"
+        } >> $GITHUB_OUTPUT
+
+      - name: the kid
+        id: kid
+        run:
+          echo {{ steps.extract_kid.outputs.kid}}
