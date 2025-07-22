@@ -38,4 +38,4 @@ jobs:
       - name: the kid
         id: kid
         run:
-          echo {{ steps.extract_kid.outputs.kid}}
+          echo "{{ steps.extract_kid.outputs.kid}}"
